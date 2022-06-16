@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { Viewer } from 'photo-sphere-viewer';
 import { MarkersPlugin } from "photo-sphere-viewer/dist/plugins/markers";
 import { VirtualTourPlugin } from 'photo-sphere-viewer/dist/plugins/virtual-tour';
+import { Animation } from 'photo-sphere-viewer';
 
 import { marker } from '../data/Marker';
 import { Nodes } from '../data/Node';
@@ -44,7 +45,34 @@ var PanoImage = (props) => {
             console.log(`Clicked on longitude= ${data.longitude}, latitude = ${data.latitude}`);
             console.log(virtualTour);
         })
-    });
+
+        viewer.on('ready', intro);
+
+        function intro() {
+            // default far plane is too close to render fisheye=4
+            // you can also skip this line and start with fisheye=2
+            viewer.renderer.camera.far *= 2;
+          
+            new Animation({
+              properties: {
+                lat: { start: -Math.PI / 2, end: 0 },
+                long: { start: Math.PI, end: 0 },
+                zoom: { start: 0, end: 50 },
+                fisheye: { start: 4, end: 0 },
+              },
+              duration: 2000,
+              easing: 'inOutQuad',
+              onTick: (properties) => {
+                viewer.setOption('fisheye', properties.fisheye);
+                viewer.rotate({ longitude: properties.long, latitude: properties.lat });
+                viewer.zoom(properties.zoom);
+              }
+            });
+          }
+
+});
+
+
     
 
     return (
