@@ -1,23 +1,23 @@
 import styles from '../styles/Home.module.css'
 import React, { useEffect } from 'react'
 import PanoImage from './component/PanoImage';
+import { Main } from 'next/document';
+
 
 
 class Home extends React.Component {
-  constructor(props) {
-    super(props);
-    this.img = "../images/360.jpg";
-    this.caption = "Contoh Captions di 360";
+  constructor() {
+    super();
+    this.state = {
+      img: './images/360.jpg',
+      caption: "test Panorama with PSV",
+    }
   }
 
   render() {
        return ( 
         <>
-        <div className={styles.container} style={{position: 'absolute'}}>
-          <h2 color='white'></h2>
-          
-          </div>
-          <PanoImage img={this.img} caption={this.caption} />
+          <PanoImage style={{position: 'relative', marginTop: '-10px'}} />
         </>
     )
 
