@@ -6,6 +6,7 @@ export const Nodes = [
         panorama: 'https://photo-sphere-viewer-data.netlify.app/assets/tour/key-biscayne-2.jpg',
         thumbnail: 'https://photo-sphere-viewer-data.netlify.app/assets/tour/key-biscayne-2-thumb.jpg',
         name    : 'Two',
+        description : 'test deskripsi',
         links   : [
             { nodeId: '2' },
         ],
@@ -19,6 +20,7 @@ export const Nodes = [
         thumbnail: 'https://photo-sphere-viewer-data.netlify.app/assets/tour/key-biscayne-1-thumb.jpg',
         name    : 'One',
         caption    : 'One',
+        description : 'test deskripsi',
         links   : [
             { nodeId: '1' },
             
@@ -30,3 +32,4 @@ export const Nodes = [
         
     },
 ];
+

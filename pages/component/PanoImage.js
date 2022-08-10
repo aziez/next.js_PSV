@@ -2,43 +2,45 @@ import React, { useEffect } from 'react'
 import { Viewer } from 'photo-sphere-viewer';
 import { MarkersPlugin } from "photo-sphere-viewer/dist/plugins/markers";
 import { VirtualTourPlugin } from 'photo-sphere-viewer/dist/plugins/virtual-tour';
+import { GyroscopePlugin } from 'photo-sphere-viewer/dist/plugins/gyroscope';
+import { StereoPlugin } from 'photo-sphere-viewer/dist/plugins/stereo';
 import { Animation } from 'photo-sphere-viewer';
 
 import { marker } from '../data/Marker';
 import { Nodes } from '../data/Node';
+import { nav } from '../component/Navbar';
+import { Alert } from 'antd';
 
 var PanoImage = (props) => {
     const sphereElementRef = React.useRef();
     // const marker = markers[0];
+
+    console.log(nav);
 
     useEffect(() => {
         let viewer = new Viewer({
             container: sphereElementRef.current,
             loadingImg: 'https://photo-sphere-viewer.js.org/assets/photosphere-logo.gif',
             loadingTxt: 'Loading...',
-            navbar: [
-                'autorotate',
-                'zoom',
-                {
-                    title: 'change Point',
-                    content:'test',
-                    onClick: () => {
-                        alert('test');
-                    }
-                },
-                'move',
-                'caption',
-                'fullscreen',
-            ],
+            // navbar: {nav},
+            navbar: ['autorotate','zoom', 'description', {
+                id: 'virtual-tour',
+                title: 'Virtual Tour',
+                content: '<img src="https://photo-sphere-viewer.js.org/favicon.png" alt="Virtual Tour" />', 
+                onClick: () => {
+                    alert('Virtual Tour');
+                }}],
 
             plugins: [
                 [MarkersPlugin,  {markers: marker}], 
-                [VirtualTourPlugin, {positionMode: VirtualTourPlugin.MODE_GPS, renderMode  :VirtualTourPlugin.MODE_3D,}]    
+                [VirtualTourPlugin, {positionMode: VirtualTourPlugin.MODE_GPS, renderMode  :VirtualTourPlugin.MODE_3D,}],
+                [GyroscopePlugin, {absolutePosition: true}],
+                [StereoPlugin, {}],
             ],
         });
 
         var virtualTour = viewer.getPlugin(VirtualTourPlugin);
-
+        
         virtualTour.setNodes(Nodes);
         
         viewer.on('click', (e, data) =>{
@@ -47,10 +49,9 @@ var PanoImage = (props) => {
         })
 
         viewer.on('ready', intro);
+        // viewer.navbar.getButton('virtual-tour').show();
 
         function intro() {
-            // default far plane is too close to render fisheye=4
-            // you can also skip this line and start with fisheye=2
             viewer.renderer.camera.far *= 2;
           
             new Animation({
@@ -71,9 +72,7 @@ var PanoImage = (props) => {
           }
 
 });
-
-
-    
+  
 
     return (
         <div ref={sphereElementRef} style={{width: '100vw', height: '100vh', position:'absolute' }}></div>
